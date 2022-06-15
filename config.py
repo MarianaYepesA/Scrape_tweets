@@ -6,7 +6,6 @@ bearer_token = 'AAAAAAAAAAAAAAAAAAAAAKO6MwEAAAAANlS%2FJYSof8VxQnORVzJCnXvP1AA%3D
 access_token = '1362526465716342784-CZuCML3Ge5a4WZRL6KuINgesWugV1g'
 access_token_secret = 'hlEjf50ePSRAnyAxTimJnUWzk8hQrU0rT1wqFvw1J1DHx'
 
-# This is to connect to Tweepy (Twitter API v1.1), but we want to work with V2.0 since it allows to use the full_archive
 '''
 auth = tweepy.OAuthHandler(api_key, api_key_secret)
 auth.set_access_token(access_token, access_token_secret)
