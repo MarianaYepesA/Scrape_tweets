@@ -7,6 +7,7 @@ import config
 import tweepy
 import json
 
+
 # Configure connection. Bearer token (Auth2.0) works for full archive.
 client = tweepy.Client(bearer_token=config.bearer_token, wait_on_rate_limit= True)
 
@@ -81,7 +82,8 @@ for i in range(len(matches["Date"])):
 # Get the number of tweets for a certain topic, get_all_tweets_count function access the full Archive.
 keywords = ['immigrant', 'migration']
 
-# Function to search tweet count for a certain keyword, date and place (place could be empty).
+# Function to search tweet count for a certain keyword, date and place (place could be empty). It considers 2 days before
+# and two after the match. The longest period it can consider is a month
 def count_tweets(keyword, match_day, place):
     date_1 = datetime.datetime.strptime(match_day, '%Y-%m-%d')
     start_date = date_1 - datetime.timedelta(days=2)
@@ -94,13 +96,24 @@ def count_tweets(keyword, match_day, place):
         count = client.get_all_tweets_count(query=keyword + str(' place_country:'+place), granularity='day', start_time=start, end_time=end)
     return count[0]
 
+def count_tweets_all(keyword, match_day, place):
+    date_1 = datetime.datetime.strptime(match_day, '%Y-%m-%d')
+    start = date_1.strftime('%Y-%m-%d') + str('T00:00:00Z')
+    end_date = datetime.date.today()
+    end = end_date.strftime('%Y-%m-%d') + str('T00:00:00Z')
+    if place == "":
+        count = client.get_all_tweets_count(query=keyword, granularity='day', start_time=start, end_time=end)
+    else :
+        count = client.get_all_tweets_count(query=keyword + str(' place_country:'+place), granularity='day', start_time=start, end_time=end)
+    return count[0]
+
 results = []
 
 for k in keywords:
-    for place in ['','GB','IT']:
-        count_vector = count_tweets(k,'2021-07-21',place)
+    for place in ['','US','GB','FR','ES']:
+        count_vector = count_tweets_all(k,'2022-05-01',place)
         for count in count_vector:
             results.append((k,place,count['start'],count['end'],count['tweet_count']))
 
 tweets_count =pd.DataFrame(results, columns=['Keyword','Place','Start_date','End_date','Tweets_count'])
-tweets_count.to_csv("Preliminary_results.csv", index=False)
+tweets_count.to_csv("Tweet_count_since_2019.csv", index=False)
