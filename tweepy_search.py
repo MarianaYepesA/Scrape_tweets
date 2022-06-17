@@ -7,6 +7,9 @@ import config
 import tweepy
 import json
 
+# Set up directory
+maindir = os.getcwd()
+outputdir = os.path.join(maindir,'Output')
 
 # Configure connection. Bearer token (Auth2.0) works for full archive.
 client = tweepy.Client(bearer_token=config.bearer_token, wait_on_rate_limit= True)
@@ -79,9 +82,6 @@ matches.dropna()
 for i in range(len(matches["Date"])):
     matches["Date"][i]=datetime.datetime.strptime(matches["Date"][i].replace('_x000D_',''), "%d-%m-%Y").strftime("%Y-%m-%d")
 
-# Get the number of tweets for a certain topic, get_all_tweets_count function access the full Archive.
-keywords = ['immigrant', 'migration']
-
 # Function to search tweet count for a certain keyword, date and place (place could be empty). It considers 2 days before
 # and two after the match. The longest period it can consider is a month
 def count_tweets(keyword, match_day, place):
@@ -107,13 +107,16 @@ def count_tweets_all(keyword, match_day, place):
         count = client.get_all_tweets_count(query=keyword + str(' place_country:'+place), granularity='day', start_time=start, end_time=end)
     return count[0]
 
+# Get the number of tweets for a certain topic, get_all_tweets_count function access the full Archive.
+keywords = ['immigrant', 'migration']
+# Store the results in an empty list
 results = []
 
 for k in keywords:
-    for place in ['','US','GB','FR','ES']:
-        count_vector = count_tweets_all(k,'2022-05-01',place)
+    for place in ['','US','GB','IT']:
+        count_vector = count_tweets(k,'2021-07-11',place)
         for count in count_vector:
             results.append((k,place,count['start'],count['end'],count['tweet_count']))
 
 tweets_count =pd.DataFrame(results, columns=['Keyword','Place','Start_date','End_date','Tweets_count'])
-tweets_count.to_csv("Tweet_count_since_2019.csv", index=False)
+tweets_count.to_csv(os.path.join(outputdir,"Tweet_count_final_euro_2021.csv"), index=False)
