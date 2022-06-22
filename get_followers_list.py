@@ -25,7 +25,7 @@ for team in team_accounts_english:
 #function to get an account id, and its followers
 def get_followers(account):
     id = client.get_users(usernames = account)[0][0]['id']
-    for fol in tweepy.Paginator(client.get_users_followers, id=id, max_results=100).flatten(limit=2000000):
+    for fol in tweepy.Paginator(client.get_users_followers, id=id, max_results=100).flatten(limit=1000):
         results.append((account,id,fol['username'],fol['id']))
 
 for account in team_accounts:

@@ -107,16 +107,32 @@ def count_tweets_all(keyword, match_day, place):
         count = client.get_all_tweets_count(query=keyword + str(' place_country:'+place), granularity='day', start_time=start, end_time=end)
     return count[0]
 
+# Function to get old tweets for a certain keyword
+def get_old_tweets(keyword, start_date, end_date, place):
+    if place == "":
+        tweets = tweepy.Paginator(client.search_all_tweets, query=keyword, start_time=start_date, end_time=end_date,
+                                  max_results=100).flatten(limit=12000)
+    else :
+        tweets = tweepy.Paginator(client.search_all_tweets, query=keyword + str(' place_country:'+place),
+                                  start_time=start_date, end_time=end_date, max_results=100).flatten(limit=12000)
+    return tweets
+
 # Get the number of tweets for a certain topic, get_all_tweets_count function access the full Archive.
 keywords = ['immigrant', 'migration']
 # Store the results in an empty list
 results = []
 
 for k in keywords:
-    for place in ['','US','GB','IT']:
-        count_vector = count_tweets(k,'2021-07-11',place)
-        for count in count_vector:
-            results.append((k,place,count['start'],count['end'],count['tweet_count']))
-
-tweets_count =pd.DataFrame(results, columns=['Keyword','Place','Start_date','End_date','Tweets_count'])
-tweets_count.to_csv(os.path.join(outputdir,"Tweet_count_final_euro_2021.csv"), index=False)
+    for place in ['']:
+        match_day = '2021-07-11'
+        date_1 = datetime.datetime.strptime(match_day, '%Y-%m-%d')
+        start_date = date_1 - datetime.timedelta(days=2)
+        for single_date in (start_date + datetime.timedelta(n) for n in range(5)):
+            print(k,single_date.strftime('%Y-%m-%d')+ str('T00:00:00Z'),
+                                           (single_date+datetime.timedelta(1)).strftime('%Y-%m-%d')+ str('T00:00:00Z'),place)
+            tweets_vector = get_old_tweets(k,single_date.strftime('%Y-%m-%d')+ str('T00:00:00Z'),
+                                           (single_date+datetime.timedelta(1)).strftime('%Y-%m-%d')+ str('T00:00:00Z'),place)
+            for tweet in tweets_vector:
+                results.append((k,place,single_date.strftime('%Y-%m-%d'),(single_date+datetime.timedelta(1)).strftime('%Y-%m-%d'),tweet.id, tweet.text))
+tweets_results =pd.DataFrame(results, columns=['Keyword','Place','Start_date','End_date','Tweets_id','Tweet_text'])
+tweets_results.to_csv(os.path.join(outputdir,"Tweets_final_euro_2021.csv"), index=False)
