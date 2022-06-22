@@ -134,5 +134,5 @@ for k in keywords:
                                            (single_date+datetime.timedelta(1)).strftime('%Y-%m-%d')+ str('T00:00:00Z'),place)
             for tweet in tweets_vector:
                 results.append((k,place,single_date.strftime('%Y-%m-%d'),(single_date+datetime.timedelta(1)).strftime('%Y-%m-%d'),tweet.id, tweet.text))
-tweets_results =pd.DataFrame(results, columns=['Keyword','Place','Start_date','End_date','Tweets_id','Tweet_text'])
-tweets_results.to_csv(os.path.join(outputdir,"Tweets_final_euro_2021.csv"), index=False)
+    tweets_results =pd.DataFrame(results, columns=['Keyword','Place','Start_date','End_date','Tweets_id','Tweet_text'])
+    tweets_results.to_csv(os.path.join(outputdir,"Tweets_final_euro_2021"+str(k)+".csv"), index=False)
