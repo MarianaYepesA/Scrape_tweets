@@ -12,8 +12,7 @@ maindir = os.getcwd()
 outputdir = os.path.join(maindir,'Output')
 
 # Configure connection. Bearer token (Auth2.0) works for full archive.
-client = tweepy.Client(bearer_token=config.bearer_token, wait_on_rate_limit= True)
-client2 = tweepy.Client(bearer_token=config.bearer_token_2, wait_on_rate_limit=True)
+client = tweepy.Client(bearer_token=config.bearer_token_2, wait_on_rate_limit=True)
 
 # Loading dataset
 matches = pd.read_excel("Eurocupsf.xlsx", engine='openpyxl')
@@ -119,7 +118,7 @@ def get_old_tweets(keyword, start_date, end_date, place):
     return tweets
 
 # Get the number of tweets for a certain topic, get_all_tweets_count function access the full Archive.
-keywords = ['immigrant']
+keywords = ['migration']
 # Store the results in an empty list
 results = []
 
