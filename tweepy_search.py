@@ -13,9 +13,10 @@ outputdir = os.path.join(maindir,'Output')
 
 # Configure connection. Bearer token (Auth2.0) works for full archive.
 client = tweepy.Client(bearer_token=config.bearer_token, wait_on_rate_limit= True)
+client2 = tweepy.Client(bearer_token=config.bearer_token_2, wait_on_rate_limit=True)
 
 # Loading dataset
-matches = pd.read_excel("Eurocupsf.xlsx")
+matches = pd.read_excel("Eurocupsf.xlsx", engine='openpyxl')
 #Separate teams in different columns
 matches["Team 1"]=matches['Team 1'].astype(str)
 matches["Team 2"]=matches['Team 2'].astype(str)
@@ -128,11 +129,14 @@ for k in keywords:
         date_1 = datetime.datetime.strptime(match_day, '%Y-%m-%d')
         start_date = date_1 - datetime.timedelta(days=2)
         for single_date in (start_date + datetime.timedelta(n) for n in range(5)):
+            filename = "Tweets_final_euro_2021_" + str(k) + "_" + str(place) + "_" + str(
+                single_date.strftime('%Y-%m-%d')) + ".csv"
+            print(filename)
             print(k,single_date.strftime('%Y-%m-%d')+ str('T00:00:00Z'),
                                            (single_date+datetime.timedelta(1)).strftime('%Y-%m-%d')+ str('T00:00:00Z'),place)
             tweets_vector = get_old_tweets(k,single_date.strftime('%Y-%m-%d')+ str('T00:00:00Z'),
                                            (single_date+datetime.timedelta(1)).strftime('%Y-%m-%d')+ str('T00:00:00Z'),place)
             for tweet in tweets_vector:
                 results.append((k,place,single_date.strftime('%Y-%m-%d'),(single_date+datetime.timedelta(1)).strftime('%Y-%m-%d'),tweet.id, tweet.text))
-    tweets_results =pd.DataFrame(results, columns=['Keyword','Place','Start_date','End_date','Tweets_id','Tweet_text'])
-    tweets_results.to_csv(os.path.join(outputdir,"Tweets_final_euro_2021"+str(k)+".csv"), index=False)
+            tweets_results =pd.DataFrame(results, columns=['Keyword','Place','Start_date','End_date','Tweets_id','Tweet_text'])
+            tweets_results.to_csv(os.path.join(outputdir,filename), index=False)
