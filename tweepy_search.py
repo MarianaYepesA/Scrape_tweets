@@ -107,7 +107,7 @@ def count_tweets_all(keyword, match_day, place):
     else :
         count = client.get_all_tweets_count(query=keyword + str(' place_country:'+place), granularity='day', start_time=start, end_time=end)
     return count[0]
-
+3
 # Function to get old tweets for a certain keyword
 def get_old_tweets(keyword, start_date, end_date, place):
     if place == "":
