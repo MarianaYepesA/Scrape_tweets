@@ -13,7 +13,6 @@ outputdir = os.path.join(maindir,'Output')
 
 # Configure connection. Bearer token (Auth2.0) works for full archive.
 client = tweepy.Client(bearer_token=config.bearer_token, wait_on_rate_limit= True)
-client2 = tweepy.Client(bearer_token=config.bearer_token_2, wait_on_rate_limit=True)
 
 # Loading dataset
 matches = pd.read_excel("Eurocupsf.xlsx", engine='openpyxl')
