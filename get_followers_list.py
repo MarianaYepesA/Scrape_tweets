@@ -25,11 +25,14 @@ for team in team_accounts_english:
 #function to get an account id, and its followers
 def get_followers(account):
     id = client.get_users(usernames = account)[0][0]['id']
-    for fol in tweepy.Paginator(client.get_users_followers, id=id, max_results=100).flatten(limit=1000):
-        results.append((account,id,fol['username'],fol['id']))
+    for fol in tweepy.Paginator(client.get_users_followers, id=id, max_results=100, user_fields=["location","created_at"]).flatten(limit=1000):
+        if fol.location is not None:
+            results.append((account,id,fol['username'],fol['id'], fol.location))
+        else:
+            results.append((account, id, fol['username'], fol['id'], ""))
 
 for account in team_accounts:
     results = []
     followers = get_followers(account)
-    followers_team =pd.DataFrame(results, columns=['account_name','account_id','follower_username','follower_id'])
+    followers_team =pd.DataFrame(results, columns=['account_name','account_id','follower_username','follower_id', 'follower_location'])
     followers_team.to_csv("Followers_"+str(account)+".csv", index=False)
