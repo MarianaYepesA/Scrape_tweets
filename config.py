@@ -13,6 +13,8 @@ bearer_token_2 = 'AAAAAAAAAAAAAAAAAAAAAFhseAEAAAAAudqucQncjqkLxd1U6Rbz65hqJyo%3D
 access_token_2 = '1539981600787767296-HigaVBGvCYQBtDj0hIPCkwNcOgmgL9'
 access_token_secret_2 = 'eNPiL4loCLPBZlhYQ1tx1cwKHOBeOtylEiWgH3GXkbTWS'
 
+# Brian's account
+bearer_token_b = 'AAAAAAAAAAAAAAAAAAAAALDleAEAAAAAmC%2F3yOPE7NZKaf7lx5IZAMEstd0%3DbVCVhf9Tys9mliqL6QzoxwIaB0dWexyTczwgsCGKxOMXmaPcs4'
 '''
 auth = tweepy.OAuthHandler(api_key, api_key_secret)
 auth.set_access_token(access_token, access_token_secret)
