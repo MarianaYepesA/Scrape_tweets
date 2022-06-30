@@ -19,7 +19,7 @@ followers_username = users_file['follower_username']
 
 # Function to get tweets from a user account
 def get_user_tweets(id, end_date):
-    tweets = client.get_users_tweets(id=id, end_time=end_date, tweet_fields=["lang","created_at","public_metrics"], max_results=100)
+    tweets = client.get_users_tweets(id=id, end_time=end_date, tweet_fields=["lang","created_at","public_metrics","geo"],max_results=100)
     return tweets
 
 results=[]
@@ -30,10 +30,14 @@ for index,id in enumerate(followers_id):
     tweets = get_user_tweets(id,end_date)
     if tweets.data is not None:
         for tweet in tweets.data:
-            results.append((id, followers_username[index],tweet.id, tweet.text,tweet.lang, tweet.created_at,
+            print(tweet.lang, tweet.created_at,tweet.geo,tweet.public_metrics['retweet_count'],tweet.public_metrics['reply_count'],
+                            tweet.public_metrics['like_count'],tweet.public_metrics['quote_count'])
+            results.append((id, followers_username[index],tweet.id, tweet.text,tweet.lang, tweet.created_at,tweet.geo,
                             tweet.public_metrics['retweet_count'],tweet.public_metrics['reply_count'],
                             tweet.public_metrics['like_count'],tweet.public_metrics['quote_count']))
+
 tweets_results =pd.DataFrame(results, columns=['follower_id','follower_username','tweet_id','tweet_text','tweet_lang',
-                                               'tweet_created_at','tweet_retweet_count','tweet_reply_count',
+                                               'tweet_created_at','tweet_geo','tweet_retweet_count','tweet_reply_count',
                                                'tweet_like_count','tweet_quote_count'])
+
 tweets_results.to_csv(os.path.join(outputdir,"Tweets_followers_England_2021.csv"), index=False)

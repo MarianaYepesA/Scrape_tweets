@@ -1,4 +1,4 @@
-import tweepy
+
 # Cris' first account
 api_key = 'MhIqG5Dv2lCZ45Hal6b1B6dDC'
 api_key_secret = 'DHBYT1R3sgyPsl1pwIEETuoP2hv3LGThzPouKYXDL06IvChLHK'
@@ -15,9 +15,3 @@ access_token_secret_2 = 'eNPiL4loCLPBZlhYQ1tx1cwKHOBeOtylEiWgH3GXkbTWS'
 
 # Brian's account
 bearer_token_b = 'AAAAAAAAAAAAAAAAAAAAALDleAEAAAAAmC%2F3yOPE7NZKaf7lx5IZAMEstd0%3DbVCVhf9Tys9mliqL6QzoxwIaB0dWexyTczwgsCGKxOMXmaPcs4'
-'''
-auth = tweepy.OAuthHandler(api_key, api_key_secret)
-auth.set_access_token(access_token, access_token_secret)
-
-api = tweepy.API(auth)
-'''
