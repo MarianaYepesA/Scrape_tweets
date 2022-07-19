@@ -1,0 +1,11 @@
+import csv
+from textblob import TextBlob
+
+infile = 'Tweets_final_euro_2021_immigrant__2021-07-09.csv'
+
+with open(infile, 'r') as csvfile:
+    rows = csv.reader(csvfile)
+    for row in rows:
+        sentence = row[5]
+        blob = TextBlob(sentence)
+        print (blob.sentiment)
